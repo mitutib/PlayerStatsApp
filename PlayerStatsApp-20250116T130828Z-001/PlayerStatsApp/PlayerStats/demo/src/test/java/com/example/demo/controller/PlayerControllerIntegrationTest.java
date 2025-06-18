@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.model.Player;
 import com.example.demo.repository.PlayerRepository;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,6 +73,34 @@ public class PlayerControllerIntegrationTest {
 
         mockMvc.perform(get("/players")).andExpect(status().isOk()).andExpect(jsonPath("$[0].name").value("James")).andExpect(jsonPath("$[0].age").value(40));
     }
+
+    @Test
+    @DisplayName("Player has been updated")
+    void testUpdatePlayer() throws Exception {
+
+        Player initialPlayer = new Player(null, "Old Name", 25, List.of());
+        Player saved = playerRepository.save(initialPlayer);
+
+
+        String updatedJson = """
+        {
+          "name": "New Name",
+          "age": 30,
+          "stats": []
+        }
+    """;
+
+
+        mockMvc.perform(put("/players/{id}", saved.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("New Name"))
+                .andExpect(jsonPath("$.age").value(30));
+    }
+
+
+
 
     @Test
     @DisplayName("Player has been successfully deleted")
