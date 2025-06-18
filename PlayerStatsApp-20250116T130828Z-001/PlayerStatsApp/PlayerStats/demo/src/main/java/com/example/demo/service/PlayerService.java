@@ -56,9 +56,17 @@ public class PlayerService {
     }
 
 
+//    public boolean deletePlayer(Long id) {
+//        playerRepository.deleteById(id);
+//        return false;
+//    }
+
+
     public boolean deletePlayer(Long id) {
-        playerRepository.deleteById(id);
-        return false;
+        return playerRepository.findById(id).map(player -> {
+            playerRepository.delete(player);
+            return true;
+        }).orElse(false);
     }
 
 
