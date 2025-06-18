@@ -85,6 +85,7 @@ public class PlayerControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Player been successfully deleted")
     void testDeletePlayer() throws Exception {
 
         String playerJson = """
