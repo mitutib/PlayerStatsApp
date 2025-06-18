@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+
 import com.example.demo.dto.PlayerDTO;
 import com.example.demo.model.Player;
 import com.example.demo.service.PlayerService;
@@ -44,7 +45,7 @@ public class PlayerControllerTest {
         ResponseEntity<?> response = playerController.addPlayer(player);
 
         assertEquals(200, response.getStatusCodeValue());
-        assertTrue(response.getBody() instanceof PlayerDTO);
+        assertInstanceOf(PlayerDTO.class, response.getBody());
         assertEquals("Alex", ((PlayerDTO) response.getBody()).getName());
     }
 
@@ -59,7 +60,6 @@ public class PlayerControllerTest {
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("Invalid age", response.getBody());
     }
-
 
 
 }

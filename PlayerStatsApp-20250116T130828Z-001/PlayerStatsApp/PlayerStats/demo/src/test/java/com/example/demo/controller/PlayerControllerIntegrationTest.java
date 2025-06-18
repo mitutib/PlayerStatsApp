@@ -40,7 +40,7 @@ public class PlayerControllerIntegrationTest {
 
 
     @Test
-    @DisplayName("Has been successfully added")
+    @DisplayName("Player has been successfully added")
     void testAddPlayer() throws Exception {
         String playerJson = """
                     {
@@ -50,16 +50,10 @@ public class PlayerControllerIntegrationTest {
                     }
                 """;
 
-        mockMvc.perform(post("/players")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(playerJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("James"))
-                .andExpect(jsonPath("$.age").value(40));
+        mockMvc.perform(post("/players").contentType(MediaType.APPLICATION_JSON).content(playerJson)).andExpect(status().isOk()).andExpect(jsonPath("$.name").value("James")).andExpect(jsonPath("$.age").value(40));
 
 
     }
-
 
     @Test
     void testAddAndGetPlayers() throws Exception {
@@ -72,49 +66,31 @@ public class PlayerControllerIntegrationTest {
                 }
                 """;
 
-        mockMvc.perform(post("/players")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(playerJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("James"))
-                .andExpect(jsonPath("$.age").value(40));
+        mockMvc.perform(post("/players").contentType(MediaType.APPLICATION_JSON).content(playerJson)).andExpect(status().isOk()).andExpect(jsonPath("$.name").value("James")).andExpect(jsonPath("$.age").value(40));
 
-
-        mockMvc.perform(get("/players"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("James"))
-                .andExpect(jsonPath("$[0].age").value(40));
+        mockMvc.perform(get("/players")).andExpect(status().isOk()).andExpect(jsonPath("$[0].name").value("James")).andExpect(jsonPath("$[0].age").value(40));
     }
 
     @Test
-    @DisplayName("Player been successfully deleted")
+    @DisplayName("Player has been successfully deleted")
     void testDeletePlayer() throws Exception {
 
         String playerJson = """
-    {
-      "name": "ToDelete",
-      "age": 28,
-      "stats": []
-    }
-    """;
+                {
+                  "name": "ToDelete",
+                  "age": 28,
+                  "stats": []
+                }
+                """;
 
-        MvcResult result = mockMvc.perform(post("/players")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(playerJson))
-                .andExpect(status().isOk())
-                .andReturn();
-
+        MvcResult result = mockMvc.perform(post("/players").contentType(MediaType.APPLICATION_JSON).content(playerJson)).andExpect(status().isOk()).andReturn();
 
         String responseBody = result.getResponse().getContentAsString();
         Long playerId = ((Integer) JsonPath.read(responseBody, "$.id")).longValue();
 
+        mockMvc.perform(delete("/players/{id}", playerId)).andExpect(status().isNoContent());
 
-        mockMvc.perform(delete("/players/{id}", playerId))
-                .andExpect(status().isNoContent());
-
-
-        mockMvc.perform(get("/players/{id}", playerId))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/players/{id}", playerId)).andExpect(status().isNotFound());
     }
 
 
