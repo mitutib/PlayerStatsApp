@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -25,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class PlayerControllerIntegrationTest {
 
@@ -45,6 +43,8 @@ public class PlayerControllerIntegrationTest {
     @Test
     @DisplayName("Player has been successfully added")
     void testAddPlayer() throws Exception {
+
+        // JSON.de adaugat obiect
         String playerJson = """
                     {
                       "name": "James",
@@ -55,10 +55,12 @@ public class PlayerControllerIntegrationTest {
 
         mockMvc.perform(post("/players").contentType(MediaType.APPLICATION_JSON).content(playerJson)).andExpect(status().isOk()).andExpect(jsonPath("$.name").value("James")).andExpect(jsonPath("$.age").value(40));
 
-
     }
 
+
+
     @Test
+
     void testAddAndGetPlayers() throws Exception {
 
         String playerJson = """
@@ -83,23 +85,15 @@ public class PlayerControllerIntegrationTest {
 
 
         String updatedJson = """
-        {
-          "name": "New Name",
-          "age": 30,
-          "stats": []
-        }
-    """;
+                    {
+                      "name": "Davis",
+                      "age": 30,
+                      "stats": []
+                    }
+                """;
 
-
-        mockMvc.perform(put("/players/{id}", saved.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(updatedJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("New Name"))
-                .andExpect(jsonPath("$.age").value(30));
+        mockMvc.perform(put("/players/{id}", saved.getId()).contentType(MediaType.APPLICATION_JSON).content(updatedJson)).andExpect(status().isOk()).andExpect(jsonPath("$.name").value("Davis")).andExpect(jsonPath("$.age").value(30));
     }
-
-
 
 
     @Test
@@ -122,6 +116,9 @@ public class PlayerControllerIntegrationTest {
         mockMvc.perform(delete("/players/{id}", playerId)).andExpect(status().isNoContent());
 
         mockMvc.perform(get("/players/{id}", playerId)).andExpect(status().isNotFound());
+
+
+
     }
 
 
