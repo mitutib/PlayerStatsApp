@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.PlayerStatsDTO;
 import com.example.demo.model.Player;
 import com.example.demo.model.PlayerStats;
 import com.example.demo.repository.PlayerRepository;
@@ -23,20 +24,35 @@ public class PlayerStatsService {
     }
 
 
+//    public PlayerStats saveStats(PlayerStats stats) {
+//        if (stats.getPlayer() == null || stats.getPlayer().getId() == null) {
+//            throw new RuntimeException("Player ID is required");
+//        }
+//
+//
+//        Player player = playerRepository.findById(stats.getPlayer().getId())
+//                .orElseThrow(() -> new RuntimeException("Player not found"));
+//
+//
+//        stats.setPlayer(player);
+//
+//        return playerStatsRepository.save(stats);
+//    }
+
+
     public PlayerStats saveStats(PlayerStats stats) {
         if (stats.getPlayer() == null || stats.getPlayer().getId() == null) {
             throw new RuntimeException("Player ID is required");
         }
 
-
         Player player = playerRepository.findById(stats.getPlayer().getId())
                 .orElseThrow(() -> new RuntimeException("Player not found"));
 
-
         stats.setPlayer(player);
-
         return playerStatsRepository.save(stats);
     }
+
+
 
     public PlayerStats updateStats(Long id, PlayerStats updatedStats) {
         return playerStatsRepository.findById(id).map(stats -> {

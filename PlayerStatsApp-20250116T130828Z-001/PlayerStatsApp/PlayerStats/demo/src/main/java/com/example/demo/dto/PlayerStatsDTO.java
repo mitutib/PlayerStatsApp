@@ -15,4 +15,7 @@ public class PlayerStatsDTO {
         this.score = score;
         this.gamesPlayed = gamesPlayed;
     }
+
+    public PlayerStatsDTO() {
+    }
 }

@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.PlayerMapper;
 import com.example.demo.dto.PlayerStatsDTO;
+import com.example.demo.model.Player;
 import com.example.demo.model.PlayerStats;
 import com.example.demo.service.PlayerStatsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,41 @@ public class PlayerStatsController {
     }
 
 
+//    @PostMapping
+//    public ResponseEntity<PlayerStatsDTO> saveStats(@RequestBody PlayerStats stats) {
+//        PlayerStats savedStats = playerStatsService.saveStats(stats);
+//        PlayerStatsDTO statsDTO = PlayerMapper.toDTO(savedStats);
+//        return ResponseEntity.ok(statsDTO);
+////    }
+
+
     @PostMapping
-    public ResponseEntity<PlayerStatsDTO> saveStats(@RequestBody PlayerStats stats) {
+    public ResponseEntity<PlayerStatsDTO> saveStats(@RequestBody PlayerStatsDTO statsDto) {
+        PlayerStats stats = new PlayerStats();
+        stats.setScore(statsDto.getScore());
+        stats.setGamesPlayed(statsDto.getGamesPlayed());
+
+        if (statsDto.getPlayerId() != null) {
+            Player player = new Player();
+            player.setId(statsDto.getPlayerId());
+            stats.setPlayer(player);
+        } else {
+            throw new RuntimeException("Player ID is required in DTO");
+        }
+
         PlayerStats savedStats = playerStatsService.saveStats(stats);
-        PlayerStatsDTO statsDTO = PlayerMapper.toDTO(savedStats);
-        return ResponseEntity.ok(statsDTO);
+
+        PlayerStatsDTO responseDto = new PlayerStatsDTO();
+        responseDto.setId(savedStats.getId());
+        responseDto.setScore(savedStats.getScore());
+        responseDto.setGamesPlayed(savedStats.getGamesPlayed());
+        responseDto.setPlayerId(savedStats.getPlayer().getId());
+
+        return ResponseEntity.ok(responseDto);
     }
+
+
+
 
 
     @PutMapping("/{id}")

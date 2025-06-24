@@ -1,18 +1,17 @@
-//package com.example.demo.model;
+//package com.example.demo.security.model;
 //
 //import jakarta.persistence.*;
 //import lombok.Data;
 //
 //@Data
 //@Entity
-//@Table(name = "roles")
-//public class Role {
-//
+//@Table(name = "users")
+//public class User {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long id;
+//    private String username;
+//    private String password;
 //
-//    @Enumerated(EnumType.STRING)
-//    private Role name;
 //
 //}
