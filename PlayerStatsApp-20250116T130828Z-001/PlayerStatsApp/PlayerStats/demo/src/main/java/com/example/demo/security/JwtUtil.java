@@ -28,21 +28,12 @@ public class JwtUtil {
     }
 
     public String generateToken(String username) {
-        return builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        return builder().setSubject(username).setIssuedAt(new Date()).setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(key, SignatureAlgorithm.HS256).compact();
 
     }
 
     public String getUsernameFromToken(String token) {
-        return parser()
-                .setSigningKey(key).build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return parser().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String token) {
