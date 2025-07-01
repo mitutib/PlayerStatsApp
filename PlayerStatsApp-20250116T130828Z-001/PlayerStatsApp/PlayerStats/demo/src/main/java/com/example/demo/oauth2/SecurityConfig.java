@@ -13,12 +13,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/oauth2/**", "/login/**", "/auth/**")
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(Customizer.withDefaults());
+        http.securityMatcher("/oauth2/**", "/login/**", "/auth/**").authorizeHttpRequests(auth -> auth.anyRequest().authenticated()).oauth2Login(Customizer.withDefaults());
 
         return http.build();
     }

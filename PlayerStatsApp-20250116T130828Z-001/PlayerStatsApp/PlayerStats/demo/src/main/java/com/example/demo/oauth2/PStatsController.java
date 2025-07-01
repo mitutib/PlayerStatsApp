@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PStatsController {
 
-@GetMapping("/")
-    public String hello(){
+    @GetMapping("/")
+    public String hello() {
 
         return "Welcome to PlayerStats";
 
