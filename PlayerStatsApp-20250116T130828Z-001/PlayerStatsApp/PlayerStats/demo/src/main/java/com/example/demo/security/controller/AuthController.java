@@ -1,6 +1,6 @@
 package com.example.demo.security.controller;
 
-import com.example.demo.security.JwtUtil;
+import com.example.demo.security.auth.JwtUtil;
 import com.example.demo.security.model.User;
 import com.example.demo.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

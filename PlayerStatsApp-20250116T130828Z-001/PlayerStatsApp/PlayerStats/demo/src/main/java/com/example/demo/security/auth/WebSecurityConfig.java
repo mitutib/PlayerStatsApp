@@ -1,4 +1,4 @@
-package com.example.demo.security;
+package com.example.demo.security.auth;
 
 import com.example.demo.security.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    @Order(2)
+    @Order
     public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/api/**").csrf(csrf -> csrf.disable()).cors(cors -> cors.disable()).exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler)).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**", "/api/test/all").permitAll().anyRequest().authenticated());
 
