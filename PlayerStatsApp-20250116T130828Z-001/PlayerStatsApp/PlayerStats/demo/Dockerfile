@@ -1,8 +1,10 @@
-FROM eclipse-temurin:18-jdk-alpine
+FROM openjdk:18-alpine
 
-WORKDIR /PlayerStatsApp
+WORKDIR /app
 
-COPY target/*.jar app.jar
+COPY /target/demo-0.0.1-SNAPSHOT.jar app.jar
+#COPY src/main/resources/application.properties /app/application.properties
+
 
 EXPOSE 8080
 
