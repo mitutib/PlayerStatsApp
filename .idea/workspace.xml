@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2bebcbeb-b327-40ca-8403-0a0aa2e0b7b6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="2bebcbeb-b327-40ca-8403-0a0aa2e0b7b6" name="Changes" comment="docker compose">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/PlayerStatsApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/PlayerStatsApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/controller/PlayerControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/controller/PlayerControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/controller/PlayerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/controller/PlayerControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/controller/PlayerStatsControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/java/com/example/demo/controller/PlayerStatsControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/resources/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/src/test/resources/application-test.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,18 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "mitutib"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;mitutib&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/mitutib/PlayerStatsApp.git",
-    "accountId": "9d22a002-5b8f-4652-ad02-5d3cd12566f9"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/mitutib/PlayerStatsApp.git&quot;,
+    &quot;accountId&quot;: &quot;9d22a002-5b8f-4652-ad02-5d3cd12566f9&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -41,21 +49,28 @@
     "Application.Unnamed (1).executor": "Run",
     "Application.Unnamed.executor": "Run",
     "Docker.demo/Dockerfile.executor": "Run",
+    "Maven.demo [clean].executor": "Run",
+    "Maven.demo [install].executor": "Run",
+    "Maven.demo [package].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/Mitu Tiberiu/Desktop/PlayerStatsAp",
-    "project.structure.last.edited": "SDKs",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "configurable.group.build"
+    "settings.editor.selected.configurable": "project.propVCSSupport.Mappings"
   }
 }]]></component>
   <component name="RunManager" selected="Application.Unnamed (1)">
     <configuration name="Unnamed (1)" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.example.demo.PlayerStatsApplication" />
+      <module name="PlayerStatsApp" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -67,7 +82,9 @@
       </method>
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile" />
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
       <method v="2" />
     </configuration>
     <configuration name="demo/Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
@@ -98,6 +115,19 @@
       <option name="presentableId" value="Default" />
       <updated>1750075137959</updated>
     </task>
+    <task id="LOCAL-00001" summary="docker compose">
+      <option name="closed" value="true" />
+      <created>1756365112005</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1756365112005</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="docker compose" />
+    <option name="LAST_COMMIT_MESSAGE" value="docker compose" />
   </component>
 </project>
