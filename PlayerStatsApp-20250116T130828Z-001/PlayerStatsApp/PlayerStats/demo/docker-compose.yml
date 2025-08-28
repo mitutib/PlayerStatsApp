@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql8
+    environment:
+      MYSQL_ROOT_PASSWORD: Clepsidra11
+      MYSQL_DATABASE: playerstatsapplication
+      TZ: Europe/Bucharest
+    volumes:
+      - dbdata:/var/lib/mysql
+
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","127.0.0.1","-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/playerstatsapplication?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&connectionTimeZone=LOCAL
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Clepsidra11
+      TZ: Europe/Bucharest
+    ports:
+      - "8001:8080"
+    restart: unless-stopped
+
+volumes:
+  dbdata: {}
