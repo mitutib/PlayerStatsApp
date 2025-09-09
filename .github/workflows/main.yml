@@ -1,6 +1,4 @@
-name: CI (Build + Unit + IT + Docker)
-
-
+name: CI (Build → Tests → Docker)
 
 on:
   push:
@@ -10,8 +8,9 @@ on:
 
 env:
   JAVA_VERSION: '17'
+  POM_PATH: PlayerStatsAppp/PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/pom.xml
+  DOCKERFILE_PATH: ./Dockerfile     # schimbă dacă Dockerfile nu e în root
   DOCKER_IMAGE_NAME: playerstats
-  DOCKERFILE_PATH: ./Dockerfile
 
 jobs:
   unit-tests:
@@ -31,22 +30,41 @@ jobs:
           path: ~/.m2/repository
           key: m2-${{ hashFiles('**/pom.xml') }}
 
-      # Rulează doar testele unitare (Surefire)
+      # Compilează și rulează doar unit tests (Surefire)
       - name: Build + Unit tests
-        run: mvn -B -ntp -DskipITs=true clean test
+        run: mvn -B -ntp -DskipITs=true -f "${{ env.POM_PATH }}" clean test
 
       - name: Package (fără IT)
-        run: mvn -B -ntp -DskipITs=true -DskipTests package
+        run: mvn -B -ntp -DskipITs=true -DskipTests -f "${{ env.POM_PATH }}" package
 
-      - name: Upload JAR artifact
+      - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: target/*.jar
+          path: |
+            **/target/*.jar
 
   integration-tests:
     runs-on: ubuntu-latest
     needs: unit-tests
+    services:
+      # Dacă folosești Testcontainers, poți ȘTERGE întreg blocul "services:"
+      mysql:
+        image: mysql:8.4
+        ports: [ "3306:3306" ]
+        env:
+          MYSQL_DATABASE: appdb
+          MYSQL_USER: appuser
+          MYSQL_PASSWORD: apppass
+          MYSQL_ROOT_PASSWORD: rootpass
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uappuser -papppass"
+          --health-interval=5s --health-timeout=3s --health-retries=30
+    env:
+      # Ajustează dacă IT-urile tale citesc din env
+      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/appdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppass
     steps:
       - uses: actions/checkout@v4
 
@@ -61,8 +79,3 @@ jobs:
         with:
           path: ~/.m2/repository
           key: m2-${{ hashFiles('**/pom.xml') }}
-
-      # IT cu Maven Failsafe (presupune clase *IT.java).
-      # Dacă folosești Testcontainers, nu ai nevoie de service extern; runnerul are Docker.
-      - name: Integration tests (Failsafe)
-        run: mvn -B -ntp -DskipITs=false -D
