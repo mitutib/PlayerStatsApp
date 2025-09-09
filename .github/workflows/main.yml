@@ -8,7 +8,7 @@ on:
 
 env:
   JAVA_VERSION: '17'
-  POM_PATH: demo/pom.xml
+  POM_PATH: PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/pom.xml
   DOCKERFILE_PATH: ./Dockerfile     # schimbă dacă Dockerfile nu e în root
   DOCKER_IMAGE_NAME: playerstats
 
