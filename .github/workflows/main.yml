@@ -1,5 +1,9 @@
 name: CI (Build + Unit + IT + Docker)
 
+defaults:
+  run:
+    working-directory: ./PlayerStatsApp
+
 on:
   push:
     branches: [ main ]
