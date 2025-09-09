@@ -1,12 +1,13 @@
-name: CI-CD (Spring Boot + Maven + Docker)
+name: CI (Build + Unit + IT + Docker)
 
 on:
   push:
     branches: [ main ]
   pull_request:
+  workflow_dispatch:
 
 env:
-  JAVA_VERSION: '21'
+  JAVA_VERSION: '17'
   DOCKER_IMAGE_NAME: playerstats
   DOCKERFILE_PATH: ./Dockerfile
 
@@ -28,10 +29,9 @@ jobs:
           path: ~/.m2/repository
           key: m2-${{ hashFiles('**/pom.xml') }}
 
-      # Rulăm doar testele unitare (Surefire). Dacă nu separi IT de unit,
-      # poți înlocui cu un simplu `mvn -B -ntp test`.
+      # Rulează doar testele unitare (Surefire)
       - name: Build + Unit tests
-        run: mvn -B -ntp -DskipITs=true test
+        run: mvn -B -ntp -DskipITs=true clean test
 
       - name: Package (fără IT)
         run: mvn -B -ntp -DskipITs=true -DskipTests package
@@ -45,28 +45,6 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     needs: unit-tests
-    services:
-      mysql:
-        image: mysql:8.4
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_DATABASE: appdb
-          MYSQL_USER: appuser
-          MYSQL_PASSWORD: apppass
-          MYSQL_ROOT_PASSWORD: rootpass
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uappuser -papppass"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=30
-
-    env:
-      # Ajustează conform aplicației/IT-urilor tale
-      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/appdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: appuser
-      SPRING_DATASOURCE_PASSWORD: apppass
-
     steps:
       - uses: actions/checkout@v4
 
@@ -82,96 +60,7 @@ jobs:
           path: ~/.m2/repository
           key: m2-${{ hashFiles('**/pom.xml') }}
 
-      # Aici rulăm IT folosind Failsafe.
-      # Presupunem că ai sufix *IT.java și proprietatea -DskipITs controlează Failsafe.
+      # IT cu Maven Failsafe (presupune clase *IT.java).
+      # Dacă folosești Testcontainers, nu ai nevoie de service extern; runnerul are Docker.
       - name: Integration tests (Failsafe)
-        run: |
-          # Asigură-te că aplicația ta citește variabilele de mai sus pentru IT.
-          mvn -B -ntp -DskipITs=false -DskipTests=true verify
-
-  docker-image:
-    runs-on: ubuntu-latest
-    needs: integration-tests
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Docker build (local tag)
-        run: |
-          docker build -f ${{ env.DOCKERFILE_PATH }} -t ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }} .
-          docker save ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }} -o image.tar
-
-      - name: Upload Docker image as artifact (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-image-tar
-          path: image.tar
-
-  # --- DEPLOY/Push to registry (A) AWS ECR (comentează dacă nu folosești) ---
-  push-to-ecr:
-    runs-on: ubuntu-latest
-    needs: docker-image
-    env:
-      AWS_REGION: eu-central-1           # ajustează
-      ECR_REPO: playerstats               # ajustează
-      ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  # setează în repo secrets
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Configure AWS creds (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to ECR
-        run: |
-          aws ecr describe-repositories --repository-names $ECR_REPO >/dev/null 2>&1 || \
-            aws ecr create-repository --repository-name $ECR_REPO
-          aws ecr get-login-password --region $AWS_REGION | \
-            docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-
-      - name: Load local image
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image-tar
-          path: .
-
-      - name: Load & push
-        run: |
-          docker load -i image.tar
-          docker tag ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }} $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:${{ github.sha }}
-          docker tag $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:${{ github.sha }} $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
-          docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:${{ github.sha }}
-          docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
-
-  # --- DEPLOY/Push to registry (B) GHCR (alternativă simplă) ---
-  push-to-ghcr:
-    runs-on: ubuntu-latest
-    needs: docker-image
-    permissions:
-      contents: read
-      packages: write
-    env:
-      GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/playerstats
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Login GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
-      - name: Download image
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image-tar
-          path: .
-
-      - name: Load & push
-        run: |
-          docker load -i image.tar
-          docker tag ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }} $GHCR_IMAGE:${{ github.sha }}
-          docker tag $GHCR_IMAGE:${{ github.sha }} $GHCR_IMAGE:latest
-          docker push $GHCR_IMAGE:${{ github.sha }}
-          docker push $GHCR_IMAGE:latest
+        run: mvn -B -ntp -DskipITs=false -D
