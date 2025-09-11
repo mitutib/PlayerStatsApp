@@ -9,7 +9,7 @@ on:
 env:
   JAVA_VERSION: '17'
   POM_PATH: PlayerStatsApp-20250116T130828Z-001/PlayerStatsApp/PlayerStats/demo/pom.xml
-  DOCKERFILE_PATH: ./Dockerfile     # schimbă dacă Dockerfile nu e în root
+  DOCKERFILE_PATH: ./Dockerfile     
   DOCKER_IMAGE_NAME: playerstats
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
           path: ~/.m2/repository
           key: m2-${{ hashFiles('**/pom.xml') }}
 
-      # Compilează și rulează doar unit tests (Surefire)
+      
       - name: Build + Unit tests
         run: mvn -B -ntp -DskipITs=true -f "${{ env.POM_PATH }}" clean test
 
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: unit-tests
     services:
-      # Dacă folosești Testcontainers, poți ȘTERGE întreg blocul "services:"
+     
       mysql:
         image: mysql:8.4
         ports: [ "3306:3306" ]
@@ -61,7 +61,6 @@ jobs:
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uappuser -papppass"
           --health-interval=5s --health-timeout=3s --health-retries=30
     env:
-      # Ajustează dacă IT-urile tale citesc din env
       SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/appdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: apppass
